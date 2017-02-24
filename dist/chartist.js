@@ -4,7 +4,7 @@
     define('Chartist', [], function () {
       return (root['Chartist'] = factory());
     });
-  } else if (typeof exports === 'object') {
+  } else if (typeof module === 'object' && module.exports) {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
@@ -14,8 +14,8 @@
   }
 }(this, function () {
 
-/* Chartist.js 0.10.0
- * Copyright © 2016 Gion Kunz
+/* Chartist.js 0.10.1
+ * Copyright © 2017 Gion Kunz
  * Free to use under either the WTFPL license or the MIT license.
  * https://raw.githubusercontent.com/gionkunz/chartist-js/master/LICENSE-WTFPL
  * https://raw.githubusercontent.com/gionkunz/chartist-js/master/LICENSE-MIT
@@ -26,7 +26,7 @@
  * @module Chartist.Core
  */
 var Chartist = {
-  version: '0.10.0'
+  version: '0.10.1'
 };
 
 (function (window, document, Chartist) {
@@ -993,7 +993,8 @@ var Chartist = {
     if(useForeignObject) {
       // We need to set width and height explicitly to px as span will not expand with width and height being
       // 100% in all browsers
-      var content = '<span class="' + classes.join(' ') + '" style="' +
+      var content = '<span class="' + classes.join(' ') +
+      '" xmlns="' + Chartist.namespaces.xhtml + '" style="' +
         axis.units.len + ': ' + Math.round(positionalData[axis.units.len]) + 'px; ' +
         axis.counterUnits.len + ': ' + Math.round(positionalData[axis.counterUnits.len]) + 'px">' +
         labels[index] + '</span>';
@@ -3160,7 +3161,7 @@ var Chartist = {
   function FixedScaleAxis(axisUnit, data, chartRect, options) {
     var highLow = options.highLow || Chartist.getHighLow(data, options, axisUnit.pos);
     this.divisor = options.divisor || 1;
-    this.ticks = options.ticks || Chartist.times(this.divisor).map(function(value, index) {
+    this.ticks = options.ticks || Chartist.times(this.divisor + 1).map(function(value, index) {
       return highLow.low + (highLow.high - highLow.low) / this.divisor * index;
     }.bind(this));
     this.ticks.sort(function(a, b) {
